@@ -1,43 +1,72 @@
 ** Required values **
 Programming block name: Programmable block- Door- Automatic Open/Close
 
-name suffix:
+* name suffix:
 [room door is facing] -> [room door is not facing]
-Example:
+1 doors Example:
+Downstairs -> Reactor Room
+
+2 doors Example:
 Reactor Room <-> Outside
 
-door name:
+* door name:
 Sliding Door- [name suffix]
+1 doors Example:
+Sliding Door- Downstairs -> Reactor Room
+
+2 doors Example:
 Example:
 1) Sliding Door- Reactor Room -> Outside
 2) Sliding Door- Outside -> Reactor Room
 
-timer block name:
+* timer block name:
 Timer Block- Automatic Doors- Close- [name suffix]
+1 doors Example:
+Timer Block- Automatic Doors- Close- Downstairs -> Reactor Room
+
+2 doors Example:
 Example:
 Timer Block- Automatic Doors- Close- Reactor Room <-> Outside
 
 ** Optional values **
 
-panel1 name:
+* panel1 name:
 Button Panel- [door name]
+1 doors Example:
+Button Panel- Sliding Door- Downstairs -> Reactor Room
+
+2 doors Example:
 Example:
 Button Panel- Sliding Door- Reactor Room -> Outside
 
-panel2 name:
+* panel2 name:
 Button Panel- [door name, but with suffix reversed]
+1 doors Example:
+Button Panel- Sliding Door- Reactor Room -> Downstairs
+
+2 doors Example:
 Example:
 Button Panel- Sliding Door- Outside -> Reactor Room
 
+
 ** SETUP **
-Timer block needs:
+
+* Timer block needs:
  - Call programming block, with argument:
 `d:`[door name]+` a:Close`
+1 doors Example:
+d:Sliding Door- Downstairs -> Reactor Room a:Close
+
+2 doors Example:
 Example:
 d:Sliding Door- Reactor Room -> Outside d:Sliding Door- Outside -> Reactor Room a:Close
 
-Panel[ needs:
+* Panel needs:
  - Call programming block, with argument:
 `d:`[door name]+` a:Open t:`[timer block name]
+1 doors Example:
+d:Sliding Door- Downstairs -> Reactor Room a:Open t:Timer Block- Automatic Doors- Close- Downstairs -> Reactor Room
+
+2 doors Example:
 Example:
 d:Sliding Door- Reactor Room -> Outside d:Sliding Door- Outside -> Reactor Room a:Open t:Timer Block- Automatic Doors- Close- Reactor Room <-> Outside
