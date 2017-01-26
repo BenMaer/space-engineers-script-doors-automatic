@@ -9,49 +9,60 @@ Programming block name: Programmable block- Door- Automatic Open/Close
 [either room] <-> [the other room]
 
 1 door Example:
-Downstairs -> Reactor Room
+Bridge -> Downstairs
 
 2 doors Example:
-Reactor Room <-> Outside
+Bridge <-> Refinery
 
 * door name:
 Sliding Door- [name suffix]
+
 1 door Example:
-Sliding Door- Downstairs -> Reactor Room
+Sliding Door- Bridge -> Downstairs
 
 2 doors Example:
 Example:
-1) Sliding Door- Reactor Room -> Outside
-2) Sliding Door- Reactor Room <- Outside
+1) Sliding Door- Bridge -> Refinery
+2) Sliding Door- Bridge <- Refinery
 
 * timer block name:
 Timer Block- Automatic Doors- Close- [name suffix]
 1 door Example:
-Timer Block- Automatic Doors- Close- Downstairs -> Reactor Room
+Timer Block- Automatic Doors- Close- Bridge -> Downstairs
 
 2 doors Example:
 Example:
-Timer Block- Automatic Doors- Close- Reactor Room <-> Outside
+Timer Block- Automatic Doors- Close- Bridge <-> Refinery
 
 ** Optional values **
 
-* panel1 name:
+* panel 1 name:
+1 door:
 Button Panel- [door name]
+
+2 doors:
+Button Panel- [door name 1)]
+
 1 door Example:
-Button Panel- Sliding Door- Downstairs -> Reactor Room
+Button Panel- Sliding Door- Bridge -> Downstairs
 
 2 doors Example:
 Example:
-Button Panel- Sliding Door- Reactor Room -> Outside
+Button Panel- Sliding Door- Sliding Door- Bridge -> Refinery
 
-* panel2 name:
-Button Panel- [door name, but with suffix reversed]
+* panel 2 name:
+1 door:
+Button Panel- [door name, but with arrow direction reversed]
+
+2 doors:
+Button Panel- [door name 2)]
+
 1 door Example:
-Button Panel- Sliding Door- Reactor Room -> Downstairs
+Button Panel- Sliding Door- Bridge <- Downstairs
 
 2 doors Example:
 Example:
-Button Panel- Sliding Door- Outside -> Reactor Room
+Button Panel- Sliding Door- Sliding Door- Bridge <- Refinery
 
 
 ** SETUP **
@@ -60,18 +71,18 @@ Button Panel- Sliding Door- Outside -> Reactor Room
  - Call programming block, with argument:
 `d:`[door name]+` a:Close`
 1 door Example:
-d:Sliding Door- Downstairs -> Reactor Room a:Close
+d:Sliding Door- Bridge -> Downstairs a:Close
 
 2 doors Example:
 Example:
-d:Sliding Door- Reactor Room -> Outside d:Reactor Room <- Outside a:Close
+d:Sliding Door- Bridge -> Refinery d:Sliding Door- Bridge <- Refinery a:Close
 
 * Panel needs:
  - Call programming block, with argument:
 `d:`[door name]+` a:Open t:`[timer block name]
 1 door Example:
-d:Sliding Door- Downstairs -> Reactor Room a:Open t:Timer Block- Automatic Doors- Close- Downstairs -> Reactor Room
+d:Sliding Door- Bridge -> Downstairs a:Open t:Timer Block- Automatic Doors- Close- Bridge -> Downstairs
 
 2 doors Example:
 Example:
-d:Sliding Door- Reactor Room -> Outside d:Reactor Room <- Outside a:Open t:Timer Block- Automatic Doors- Close- Reactor Room <-> Outside
+d:Sliding Door- Bridge -> Refinery d:Sliding Door- Bridge <- Refinery a:Open t:Timer Block- Automatic Doors- Close- Bridge <-> Refinery
