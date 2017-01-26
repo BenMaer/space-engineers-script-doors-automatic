@@ -174,20 +174,6 @@ public class DoorActionContainer
 
 public void Main(string argument)
 {
-	/*
-	DoorActionContainer doorActionContainer_close_2doors = new DoorActionContainer("d:Sliding Door- TEST d:Sliding Door- TEST2 a:Close");
-	Echo("doorActionContainer_close_2doors: " + doorActionContainer_close_2doors.Description());
-
-	DoorActionContainer doorActionContainer_open_2doors = new DoorActionContainer("d:Sliding Door- TEST d:Sliding Door- TEST2 a:Open t:Timer Block- Sliding Door- TEST- Close Programming");
-	Echo("doorActionContainer_open_2doors: " + doorActionContainer_open_2doors.Description());
-	*/
-	
-	/*
-	string[] arguments = argument.Split(',');
-	string doorName = arguments[0];
-	string actionArgument = arguments[1];
-	*/
-
 	DoorActionContainer doorActionContainer_argument = new DoorActionContainer(argument);
 	if (doorActionContainer_argument.errorMessage != null)
 	{
