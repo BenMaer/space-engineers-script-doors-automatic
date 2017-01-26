@@ -1,37 +1,39 @@
-// Programming block to open/close door.
-// 
-// Declarations:
-// 
-// ** public void Main(string actionArgument)
-// * Params:
-//  - argument: a comma separated string, separating the following parameters:
-//   - door name: the name of the door to open.
-//   - actionArgument: check method `door_actionName_for_actionArgument(string actionArgument)`.
-//   - timerBlock_close_name: the name of the timer block that should be fired on to fire this programming block again to close the door.
-//     This timer block should be set up ahead of time with the following actions:
-//     1) Fire this programming block with argument "[door name],Close"
-//        For example:
-//         - "Sliding Door- TEST,Close".
-//         - "Sliding Door- TEST2,Close".
-// * Notes:
-//  - When called by a button, should be called with argument "[door name],Open,[timerBlock_close_name]",
-//    For example:
-//     - "Sliding Door- TEST,Open,Timer Block- Sliding Door- TEST- Close Programming".
-//     - "Sliding Door- TEST2,Open,Timer Block- Sliding Door- TEST2- Close Programming".
-//  - Names cannot have any commas, as we use the comma to separate parameters.
-// 
-// ** public string door_actionName_for_actionArgument(string actionArgument)
-// * Params:
-//  - actionArgument: can be "Open" or "Close"
-// * Returns:
-//  - the api action name for the door.
-//
-// ** public bool timerBlock_start(string timerBlock_name)
-// * Description: Attempts to start a timer block.
-// * Params:
-//  - timerBlock_name: name of timer block to start.
-// * Returns:
-//  - If the timer was successfully started, returns `true`, otherwise returns `false`.
+/*
+Programming block to open/close door.
+
+Declarations:
+
+** public void Main(string actionArgument)
+* Params:
+ - argument: a comma separated string, separating the following parameters:
+  - door name: the name of the door to open.
+  - actionArgument: check method `door_actionName_for_actionArgument(string actionArgument)`.
+  - timerBlock_close_name: the name of the timer block that should be fired on to fire this programming block again to close the door.
+    This timer block should be set up ahead of time with the following actions:
+    1) Fire this programming block with argument "[door name],Close"
+       For example:
+        - "Sliding Door- TEST,Close".
+        - "Sliding Door- TEST2,Close".
+* Notes:
+ - When called by a button, should be called with argument "[door name],Open,[timerBlock_close_name]",
+   For example:
+    - "Sliding Door- TEST,Open,Timer Block- Sliding Door- TEST- Close Programming".
+    - "Sliding Door- TEST2,Open,Timer Block- Sliding Door- TEST2- Close Programming".
+ - Names cannot have any commas, as we use the comma to separate parameters.
+
+** public string door_actionName_for_actionArgument(string actionArgument)
+* Params:
+ - actionArgument: can be "Open" or "Close"
+* Returns:
+ - the api action name for the door.
+
+** public bool timerBlock_start(string timerBlock_name)
+* Description: Attempts to start a timer block.
+* Params:
+ - timerBlock_name: name of timer block to start.
+* Returns:
+ - If the timer was successfully started, returns `true`, otherwise returns `false`.
+*/
 
 string door_actionName_open = "Open_On";
 string door_actionName_close = "Open_Off";
