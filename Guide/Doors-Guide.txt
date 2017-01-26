@@ -22,7 +22,7 @@ Sliding Door- Downstairs -> Reactor Room
 2 doors Example:
 Example:
 1) Sliding Door- Reactor Room -> Outside
-2) Sliding Door- Outside -> Reactor Room
+2) Sliding Door- Reactor Room <- Outside
 
 * timer block name:
 Timer Block- Automatic Doors- Close- [name suffix]
@@ -64,7 +64,7 @@ d:Sliding Door- Downstairs -> Reactor Room a:Close
 
 2 doors Example:
 Example:
-d:Sliding Door- Reactor Room -> Outside d:Sliding Door- Outside -> Reactor Room a:Close
+d:Sliding Door- Reactor Room -> Outside d:Reactor Room <- Outside a:Close
 
 * Panel needs:
  - Call programming block, with argument:
@@ -74,4 +74,4 @@ d:Sliding Door- Downstairs -> Reactor Room a:Open t:Timer Block- Automatic Doors
 
 2 doors Example:
 Example:
-d:Sliding Door- Reactor Room -> Outside d:Sliding Door- Outside -> Reactor Room a:Open t:Timer Block- Automatic Doors- Close- Reactor Room <-> Outside
+d:Sliding Door- Reactor Room -> Outside d:Reactor Room <- Outside a:Open t:Timer Block- Automatic Doors- Close- Reactor Room <-> Outside
