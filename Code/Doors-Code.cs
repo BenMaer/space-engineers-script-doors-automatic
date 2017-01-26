@@ -1,4 +1,6 @@
 /*
+Source: https://github.com/BenMaer/space-engineers-script-doors-automatic
+
 Programming block to open/close door.
 
 *** Notes:
