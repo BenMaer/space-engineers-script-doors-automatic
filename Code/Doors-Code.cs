@@ -1,7 +1,11 @@
 /*
 Programming block to open/close door.
 
-Declarations:
+*** Notes:
+	- This documentation is incomplete in terms of all declarations, but is complete in terms of explaining usage (i.e. what arguments to use on Main() method).
+	- Check Doors-Guide.txt for more details and recommendations for what parameters to send and what to name things.
+
+*** Declarations:
 
 ** public void Main(string actionArgument)
 * Params:
@@ -10,16 +14,16 @@ Declarations:
   - actionArgument: check method `door_actionName_for_actionArgument(string actionArgument)`.
   - timerBlock_close_name: the name of the timer block that should be fired on to fire this programming block again to close the door.
 	 This timer block should be set up ahead of time with the following actions:
-	 1) Fire this programming block with argument "[door name],Close"
-		 For example:
-		  - "Sliding Door- TEST,Close".
-		  - "Sliding Door- TEST2,Close".
+	 1) Fire this programming block with argument:
+		`d:`[door name]+` a:Close`
+		For example:
+		d:Sliding Door- Reactor Room -> Outside d:Sliding Door- Outside -> Reactor Room a:Close
 * Notes:
- - When called by a button, should be called with argument "[door name],Open,[timerBlock_close_name]",
+	- When called by a button, should be called with argument:
+	`d:`[door name]+` a:Open t:`[timer block name]
 	For example:
-	 - "Sliding Door- TEST,Open,Timer Block- Sliding Door- TEST- Close Programming".
-	 - "Sliding Door- TEST2,Open,Timer Block- Sliding Door- TEST2- Close Programming".
- - Names cannot have any commas, as we use the comma to separate parameters.
+	d:Sliding Door- Reactor Room -> Outside d:Sliding Door- Outside -> Reactor Room a:Open t:Timer Block- Automatic Doors- Close- Reactor Room <-> Outside
+ - Names cannot have any colons, as we use them to separate key-value pairs.
 
 ** public string door_actionName_for_actionArgument(string actionArgument)
 * Params:
@@ -39,14 +43,32 @@ const string door_actionName_open = "Open_On";
 const string door_actionName_close = "Open_Off";
 
 List<string> debugText = new List<string>();
+public string debugText_string_generate()
+{
+	string debugText_string= "";
+	for(
+		int debugText_index = 0;
+		debugText_index < debugText.Count;
+		debugText_index++
+	)
+	{
+		if (debugText_string.Length >= 0)
+		{
+			debugText_string += "\n";
+		}
+		debugText_string += debugText[debugText_index];
+	}
+
+	return debugText_string;
+}
 
 public class DoorActionContainer
 {
-	List<string> doorNames;
-	string action;
-	string timerBlock_name;
+	public List<string> doorNames;
+	public string action;
+	public string timerBlock_name;
 
-	string errorMessage;
+	public string errorMessage;
 
     public DoorActionContainer(string argument)
     {
@@ -175,38 +197,95 @@ public void Main(string argument)
 			"\n"
 			+
 			"from argument: " + argument
-			)
+			);
 		return;
 	}
 	
-	List<string> doorNames;
+	List<string> doorNames = doorActionContainer_argument.doorNames;
+	int doorNames_count = doorNames.Count;
+	if (doorNames_count <= 0)
+	{
+		Echo("Must send at least one door");
+		return;
+	}
+
+	for(
+		int doorNames_index = 0;
+		doorNames_index < doorNames_count;
+		doorNames_index++
+		)
+	{
+		performDoorAction(doorNames_index, doorActionContainer_argument);
+	}
+
+	string finalEcho = "";
+	for(
+		int debugText_index = 0;
+		debugText_index < debugText.Count;
+		debugText_index++
+	)
+	{
+		if (finalEcho.Length >= 0)
+		{
+			finalEcho += "\n";
+		}
+		finalEcho += debugText[debugText_index];
+	}
+	debugText.Add("Finished performing door action " + doorActionContainer_argument.Description());
+
+	string debugText_string = debugText_string_generate();
+	debugText.Clear();
+	Echo(debugText_string);
+}
+
+public void performDoorAction(int doorNames_index, DoorActionContainer doorActionContainer)
+{
+	if (doorActionContainer == null)
+	{
+		debugText.Add("Cannot use a nil doorActionContainer");
+		return;
+	}
+
+	List<string> doorNames = doorActionContainer.doorNames;
+	if (doorNames_index >= doorNames.Count)
+	{
+		debugText.Add(
+						"doorNames_index " + doorNames_index
+						+
+						"is outside bounds of doorNames with count " + doorNames.Count
+						);
+		return;
+	}
+
+	string doorName = doorNames[doorNames_index];
+
 	IMyDoor door = (IMyDoor)GridTerminalSystem.GetBlockWithName(doorName);
 	if (door == null)
 	{
-		Echo("Could not find door named " + doorName);
+		debugText.Add("Could not find door named " + doorName);
 		return;
 	}
 	door.GetActionWithName("OnOff_On").Apply(door);
 
-	string action = door_actionName_for_actionArgument(actionArgument);
-	if (action == null)
+	string action = doorActionContainer.action;
+	string actionName = door_actionName_for_actionArgument(action);
+	if (actionName == null)
 	{
+		debugText.Add("Could not find door named " + doorName);
 		return;
 	}
 
-	door.GetActionWithName(action).Apply(door);
+	door.GetActionWithName(actionName).Apply(door);
 
-	if (action == door_actionName_open)
+	if (actionName == door_actionName_open)
 	{
-		string timerBlock_name = arguments[2];
+		string timerBlock_name = doorActionContainer.timerBlock_name;
 		bool success = timerBlock_start(timerBlock_name);
 		if (success == false)
 		{
 			return;
 		}
 	}
-
-	Echo("successfully performed action " + actionArgument + " on door " + doorName);
 }
 
 public string door_actionName_for_actionArgument(string actionArgument)
@@ -220,7 +299,7 @@ public string door_actionName_for_actionArgument(string actionArgument)
 			return door_actionName_close;
 
 		default:
-			Echo("Unhandled actionArgument " + actionArgument);
+			debugText.Add("Unhandled actionArgument " + actionArgument);
 			return null;
 	}
 }
@@ -230,7 +309,7 @@ public bool timerBlock_start(string timerBlock_name)
 	IMyTimerBlock timerBlock = (IMyTimerBlock)GridTerminalSystem.GetBlockWithName(timerBlock_name);
 	if (timerBlock == null)
 	{
-		Echo("Error finding timer block with name " + timerBlock_name);
+		debugText.Add("Error finding timer block with name " + timerBlock_name);
 		return false;
 	}
 

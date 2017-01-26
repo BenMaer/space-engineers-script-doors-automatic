@@ -4,39 +4,40 @@ Programming block name: Programmable block- Door- Automatic Open/Close
 name suffix:
 [room door is facing] -> [room door is not facing]
 Example:
-Bridge -> Downstairs
+Reactor Room <-> Outside
 
 door name:
 Sliding Door- [name suffix]
 Example:
-Sliding Door- Bridge -> Downstairs
+1) Sliding Door- Reactor Room -> Outside
+2) Sliding Door- Outside -> Reactor Room
 
 timer block name:
 Timer Block- Automatic Doors- Close- [name suffix]
 Example:
-Timer Block- Automatic Doors- Close- Bridge -> Downstairs
+Timer Block- Automatic Doors- Close- Reactor Room <-> Outside
 
 ** Optional values **
 
 panel1 name:
 Button Panel- [door name]
 Example:
-Button Panel- Sliding Door- Bridge -> Downstairs
+Button Panel- Sliding Door- Reactor Room -> Outside
 
 panel2 name:
 Button Panel- [door name, but with suffix reversed]
 Example:
-Button Panel- Sliding Door- Downstairs -> Bridge
+Button Panel- Sliding Door- Outside -> Reactor Room
 
 ** SETUP **
 Timer block needs:
  - Call programming block, with argument:
-[door name],Close
+`d:`[door name]+` a:Close`
 Example:
-Sliding Door- Bridge -> Downstairs,Close
+d:Sliding Door- Reactor Room -> Outside d:Sliding Door- Outside -> Reactor Room a:Close
 
-Panel needs:
+Panel[ needs:
  - Call programming block, with argument:
-[door name],Open,[timer block name]
+`d:`[door name]+` a:Open t:`[timer block name]
 Example:
-Sliding Door- Bridge -> Downstairs,Open,Timer Block- Automatic Doors- Close- Bridge -> Downstairs
+d:Sliding Door- Reactor Room -> Outside d:Sliding Door- Outside -> Reactor Room a:Open t:Timer Block- Automatic Doors- Close- Reactor Room <-> Outside
