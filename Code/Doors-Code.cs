@@ -35,15 +35,151 @@ Declarations:
  - If the timer was successfully started, returns `true`, otherwise returns `false`.
 */
 
-string door_actionName_open = "Open_On";
-string door_actionName_close = "Open_Off";
+const string door_actionName_open = "Open_On";
+const string door_actionName_close = "Open_Off";
+
+List<string> debugText = new List<string>();
+
+public class DoorActionContainer
+{
+	List<string> doorNames;
+	string action;
+	string timerBlock_name;
+
+	string errorMessage;
+
+    public DoorActionContainer(string argument)
+    {
+		string[] arguments_colonSeparated = argument.Split(':');
+		int arguments_colonSeparated_length = arguments_colonSeparated.Length;
+		if (arguments_colonSeparated_length <= 1)
+		{
+			errorMessage = "You need at least one colon to define arguments in " + argument;
+			return;
+		}
+		
+		doorNames = new List<string>();
+		
+		string key = arguments_colonSeparated[0];
+		for(
+			int arguments_colonSeparated_index = 1;
+			arguments_colonSeparated_index < arguments_colonSeparated_length;
+			arguments_colonSeparated_index++
+			)
+		{
+			string valueForKey = "";
+			string argumentAtIndex = arguments_colonSeparated[arguments_colonSeparated_index];
+			if (arguments_colonSeparated_index + 1 == arguments_colonSeparated_length)
+			{
+				valueForKey = argumentAtIndex;
+				SetValueForKey(key,valueForKey);
+			}
+			else
+			{
+				string[] components = argumentAtIndex.Split(' ');
+				int components_length = components.Length;
+				if (components_length <= 1)
+				{
+					errorMessage = "You need to space out your components in argumentAtIndex: " + argumentAtIndex;
+					return;
+				}
+				
+				for(
+					int components_index = 0;
+					components_index + 1 < components_length; //We don't need to loop to the last item, since we know the last item is the next key.
+					components_index++
+					)
+				{
+					string component = components[components_index];
+					
+					if (valueForKey.Length == 0)
+					{
+						valueForKey = component;
+					}
+					else
+					{
+						valueForKey += " " + component;
+					}
+				}
+				
+				SetValueForKey(key,valueForKey);
+				key = components[components_length - 1];
+			}
+		}
+    }
+	
+	private void SetValueForKey(string argumentKey, string argumentValueForKey)
+	{
+		switch (argumentKey)
+		{
+			case "d":
+				doorNames.Add(argumentValueForKey);
+				break;
+
+			case "a":
+				action = argumentValueForKey;
+				break;
+
+			case "t":
+				timerBlock_name = argumentValueForKey;
+				break;
+		}
+	}
+
+	public string Description()
+	{
+		string Description = "";
+		Description += "doorNames: ";
+		for(
+			int doorNames_index = 0;
+			doorNames_index < doorNames.Count;
+			doorNames_index++
+			)
+		{
+			Description += "\n" + doorNames_index + ") " + doorNames[doorNames_index];
+		}
+		Description += "\n";
+		Description += "action: " + action;
+		if (timerBlock_name != null)
+		{
+			Description += "\n";
+			Description += "timerBlock_name: " + timerBlock_name;
+		}	
+		
+		return Description;
+	}
+}
 
 public void Main(string argument)
 {
+	/*
+	DoorActionContainer doorActionContainer_close_2doors = new DoorActionContainer("d:Sliding Door- TEST d:Sliding Door- TEST2 a:Close");
+	Echo("doorActionContainer_close_2doors: " + doorActionContainer_close_2doors.Description());
+
+	DoorActionContainer doorActionContainer_open_2doors = new DoorActionContainer("d:Sliding Door- TEST d:Sliding Door- TEST2 a:Open t:Timer Block- Sliding Door- TEST- Close Programming");
+	Echo("doorActionContainer_open_2doors: " + doorActionContainer_open_2doors.Description());
+	*/
+	
+	/*
 	string[] arguments = argument.Split(',');
 	string doorName = arguments[0];
 	string actionArgument = arguments[1];
+	*/
 
+	DoorActionContainer doorActionContainer_argument = new DoorActionContainer(argument);
+	if (doorActionContainer_argument.errorMessage != null)
+	{
+		Echo(
+			"doorActionContainer_argument had error " + doorActionContainer_argument.errorMessage
+			+
+			"\n"
+			+
+			"from argument: " + argument
+			)
+		return;
+	}
+	
+	List<string> doorNames;
 	IMyDoor door = (IMyDoor)GridTerminalSystem.GetBlockWithName(doorName);
 	if (door == null)
 	{
