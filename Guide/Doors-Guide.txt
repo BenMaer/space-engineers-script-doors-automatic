@@ -1,0 +1,42 @@
+** Required values **
+Programming block name: Programmable block- Door- Automatic Open/Close
+
+name suffix:
+[room door is facing] -> [room door is not facing]
+Example:
+Bridge -> Downstairs
+
+door name:
+Sliding Door- [name suffix]
+Example:
+Sliding Door- Bridge -> Downstairs
+
+timer block name:
+Timer Block- Automatic Doors- Close- [name suffix]
+Example:
+Timer Block- Automatic Doors- Close- Bridge -> Downstairs
+
+** Optional values **
+
+panel1 name:
+Button Panel- [door name]
+Example:
+Button Panel- Sliding Door- Bridge -> Downstairs
+
+panel2 name:
+Button Panel- [door name, but with suffix reversed]
+Example:
+Button Panel- Sliding Door- Downstairs -> Bridge
+
+** SETUP **
+Timer block needs:
+ - Call programming block, with argument:
+[door name],Close
+Example:
+Sliding Door- Bridge -> Downstairs,Close
+
+Panel needs:
+ - Call programming block, with argument:
+[door name],Open,[timer block name]
+Example:
+Sliding Door- Bridge -> Downstairs,Open,Timer Block- Automatic Doors- Close- Bridge -> Downstairs
