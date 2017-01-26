@@ -204,19 +204,6 @@ public void Main(string argument)
 		performDoorAction(doorNames_index, doorActionContainer_argument);
 	}
 
-	string finalEcho = "";
-	for(
-		int debugText_index = 0;
-		debugText_index < debugText.Count;
-		debugText_index++
-	)
-	{
-		if (finalEcho.Length >= 0)
-		{
-			finalEcho += "\n";
-		}
-		finalEcho += debugText[debugText_index];
-	}
 	debugText.Add("Finished performing door action " + doorActionContainer_argument.Description());
 
 	string debugText_string = debugText_string_generate();
